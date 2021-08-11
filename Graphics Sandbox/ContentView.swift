@@ -16,7 +16,7 @@ struct ContentView: View {
 
 struct MetalView: NSViewRepresentable {
     func makeCoordinator() -> Coordinator {
-        return Coordinator(self)
+        Coordinator(self)
     }
     
     func makeNSView(context: NSViewRepresentableContext<MetalView>) -> MTKView {
