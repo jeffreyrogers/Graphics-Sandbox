@@ -11,6 +11,7 @@
 		FF5E95F126C2454C00FA33B1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5E95F026C2454C00FA33B1 /* ContentView.swift */; };
 		FF5E95F326C2454F00FA33B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF5E95F226C2454F00FA33B1 /* Assets.xcassets */; };
 		FF5E95F626C2454F00FA33B1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF5E95F526C2454F00FA33B1 /* Preview Assets.xcassets */; };
+		FF5E960126C340B900FA33B1 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = FF5E960026C340B900FA33B1 /* Shaders.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,9 @@
 		FF5E95F026C2454C00FA33B1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FF5E95F226C2454F00FA33B1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FF5E95F526C2454F00FA33B1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FF5E95FC26C3401B00FA33B1 /* Graphics Sandbox-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Graphics Sandbox-Bridging-Header.h"; sourceTree = "<group>"; };
+		FF5E95FF26C3407700FA33B1 /* ShaderDefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderDefinitions.h; sourceTree = "<group>"; };
+		FF5E960026C340B900FA33B1 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +59,9 @@
 				FF5E95F026C2454C00FA33B1 /* ContentView.swift */,
 				FF5E95F226C2454F00FA33B1 /* Assets.xcassets */,
 				FF5E95F426C2454F00FA33B1 /* Preview Content */,
+				FF5E95FC26C3401B00FA33B1 /* Graphics Sandbox-Bridging-Header.h */,
+				FF5E95FF26C3407700FA33B1 /* ShaderDefinitions.h */,
+				FF5E960026C340B900FA33B1 /* Shaders.metal */,
 			);
 			path = "Graphics Sandbox";
 			sourceTree = "<group>";
@@ -99,6 +106,7 @@
 				TargetAttributes = {
 					FF5E95EA26C2454C00FA33B1 = {
 						CreatedOnToolsVersion = 13.0;
+						LastSwiftMigration = 1300;
 					};
 				};
 			};
@@ -137,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF5E960126C340B900FA33B1 /* Shaders.metal in Sources */,
 				FF5E95F126C2454C00FA33B1 /* ContentView.swift in Sources */,
 				FF5E95EF26C2454C00FA33B1 /* Graphics_SandboxApp.swift in Sources */,
 			);
@@ -265,6 +274,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -285,6 +295,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "JDR.Graphics-Sandbox";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Graphics Sandbox/Graphics Sandbox-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -294,6 +306,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -314,6 +327,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "JDR.Graphics-Sandbox";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Graphics Sandbox/Graphics Sandbox-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

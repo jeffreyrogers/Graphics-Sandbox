@@ -16,7 +16,7 @@ struct ContentView: View {
 
 struct MetalView: NSViewRepresentable {
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        return Coordinator(self)
     }
     
     func makeNSView(context: NSViewRepresentableContext<MetalView>) -> MTKView {
@@ -26,10 +26,7 @@ struct MetalView: NSViewRepresentable {
         mtkView.framebufferOnly = false
         mtkView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
         mtkView.drawableSize = mtkView.frame.size
-
-        if let metalDevice = MTLCreateSystemDefaultDevice() {
-            mtkView.device = metalDevice
-        }
+        mtkView.device = MTLCreateSystemDefaultDevice()!
         
         return mtkView
     }
@@ -38,24 +35,31 @@ struct MetalView: NSViewRepresentable {
 
     }
     
-    // TODO: rename this renderer, move out into its own class
-    // TODO: add data, and process input
     class Coordinator: NSObject, MTKViewDelegate {
         var parent: MetalView
         var device: MTLDevice!
         var commandQueue: MTLCommandQueue!
+        var pipelineState: MTLRenderPipelineState?
+        let vertexBuffer: MTLBuffer
         
         init(_ parent: MetalView) {
             self.parent = parent
-            if let metalDevice = MTLCreateSystemDefaultDevice() {
-                self.device = metalDevice
-            }
+            self.device = MTLCreateSystemDefaultDevice()!
             self.commandQueue = device.makeCommandQueue()!
+            let vertices = [Vertex2(color: [1, 0, 0, 1], pos: [-1, -1]),
+                        Vertex2(color: [0, 1, 0, 1], pos: [0, 1]),
+                        Vertex2(color: [0, 0, 1, 1], pos: [1, -1])]
+            
+            vertexBuffer = device.makeBuffer(bytes: vertices, length: vertices.count * MemoryLayout<Vertex2>.stride, options: [])!
             super.init()
         }
         
         func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-
+            do {
+                try self.pipelineState = MetalView.Coordinator.buildRenderPipelineWith(device: device, view: view)
+            } catch {
+                print("Unexpected error: \(error)")
+            }
         }
         
         func draw(in view: MTKView) {
@@ -66,10 +70,22 @@ struct MetalView: NSViewRepresentable {
             rpd?.colorAttachments[0].storeAction = .store
             
             let re = commandBuffer?.makeRenderCommandEncoder(descriptor: rpd!)
+            re?.setRenderPipelineState(pipelineState!)
+            re?.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+            re?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
             re?.endEncoding()
             
             commandBuffer?.present(view.currentDrawable!)
             commandBuffer?.commit()
+        }
+        
+        class func buildRenderPipelineWith(device: MTLDevice, view: MTKView) throws -> MTLRenderPipelineState {
+            let pipelineDescriptor = MTLRenderPipelineDescriptor()
+            let library = device.makeDefaultLibrary()
+            pipelineDescriptor.vertexFunction = library?.makeFunction(name: "vertexShader")
+            pipelineDescriptor.fragmentFunction = library?.makeFunction(name: "fragmentShader")
+            pipelineDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
+            return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
         }
     }
 }
