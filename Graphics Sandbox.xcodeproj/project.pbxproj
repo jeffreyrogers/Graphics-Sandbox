@@ -13,6 +13,7 @@
 		FF5E95F626C2454F00FA33B1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF5E95F526C2454F00FA33B1 /* Preview Assets.xcassets */; };
 		FF5E960126C340B900FA33B1 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = FF5E960026C340B900FA33B1 /* Shaders.metal */; };
 		FF6B7A0526C5A45E001B5A7E /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B7A0426C5A45E001B5A7E /* MetalView.swift */; };
+		FF6B7A0726C5B5E4001B5A7E /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		FF5E95FF26C3407700FA33B1 /* ShaderDefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderDefinitions.h; sourceTree = "<group>"; };
 		FF5E960026C340B900FA33B1 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		FF6B7A0426C5A45E001B5A7E /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				FF5E95FC26C3401B00FA33B1 /* Graphics Sandbox-Bridging-Header.h */,
 				FF5E95FF26C3407700FA33B1 /* ShaderDefinitions.h */,
 				FF5E960026C340B900FA33B1 /* Shaders.metal */,
+				FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */,
 			);
 			path = "Graphics Sandbox";
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 				FF6B7A0526C5A45E001B5A7E /* MetalView.swift in Sources */,
 				FF5E960126C340B900FA33B1 /* Shaders.metal in Sources */,
 				FF5E95F126C2454C00FA33B1 /* ContentView.swift in Sources */,
+				FF6B7A0726C5B5E4001B5A7E /* Renderer.swift in Sources */,
 				FF5E95EF26C2454C00FA33B1 /* Graphics_SandboxApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
