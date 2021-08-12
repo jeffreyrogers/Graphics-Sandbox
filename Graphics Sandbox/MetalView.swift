@@ -9,8 +9,6 @@ import SwiftUI
 import MetalKit
 
 struct MetalView: NSViewRepresentable {
-    var mouseLocation: NSPoint { NSEvent.mouseLocation }
-    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -23,12 +21,6 @@ struct MetalView: NSViewRepresentable {
         mtkView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
         mtkView.drawableSize = mtkView.frame.size
         mtkView.device = MTLCreateSystemDefaultDevice()!
-        
-        NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) {
-            print("mouse: \(self.mouseLocation.x) \(self.mouseLocation.y)")
-            return $0
-        }
-        
         return mtkView
     }
     
@@ -42,6 +34,7 @@ struct MetalView: NSViewRepresentable {
         var commandQueue: MTLCommandQueue!
         var pipelineState: MTLRenderPipelineState?
         let vertexBuffer: MTLBuffer
+        var mouseLocation: NSPoint = NSPoint(x: 0, y: 0)
         
         init(_ parent: MetalView) {
             self.parent = parent
@@ -61,8 +54,37 @@ struct MetalView: NSViewRepresentable {
             } catch {
                 print("Unexpected error: \(error)")
             }
+            
+            NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) {
+                self.mouseLocation = $0.locationInWindow
+                return $0
+            }
+            
+            NSEvent.addLocalMonitorForEvents(matching: [.leftMouseUp]) {
+                print("left mouse up")
+                return $0
+            }
+            
+            NSEvent.addLocalMonitorForEvents(matching: [.rightMouseUp]) {
+                print("right mouse up")
+                return $0
+            }
+            
+            NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) {
+                print("key \($0.charactersIgnoringModifiers ?? "")")
+                print("modifiers: \($0.modifierFlags)")
+                
+                if $0.modifierFlags.contains(.command) {
+                    if $0.characters?.contains("q") == true {
+                        return $0
+                    }
+                }
+                
+                return nil
+            }
         }
-        
+    
+        // This gets called ~60 times per second (configured in makeNSView when we set preferredFramesPerSecond)
         func draw(in view: MTKView) {
             let commandBuffer = commandQueue.makeCommandBuffer()
             let rpd = view.currentRenderPassDescriptor
