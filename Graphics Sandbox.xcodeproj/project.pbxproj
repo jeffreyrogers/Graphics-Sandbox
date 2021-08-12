@@ -14,6 +14,7 @@
 		FF5E960126C340B900FA33B1 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = FF5E960026C340B900FA33B1 /* Shaders.metal */; };
 		FF6B7A0526C5A45E001B5A7E /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B7A0426C5A45E001B5A7E /* MetalView.swift */; };
 		FF6B7A0726C5B5E4001B5A7E /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */; };
+		FF6B7A0926C5CB9F001B5A7E /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = FF6B7A0826C5CB9F001B5A7E /* teapot.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		FF5E960026C340B900FA33B1 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		FF6B7A0426C5A45E001B5A7E /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		FF6B7A0826C5CB9F001B5A7E /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				FF5E95FF26C3407700FA33B1 /* ShaderDefinitions.h */,
 				FF5E960026C340B900FA33B1 /* Shaders.metal */,
 				FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */,
+				FF6B7A0826C5CB9F001B5A7E /* teapot.obj */,
 			);
 			path = "Graphics Sandbox";
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			files = (
 				FF5E95F626C2454F00FA33B1 /* Preview Assets.xcassets in Resources */,
 				FF5E95F326C2454F00FA33B1 /* Assets.xcassets in Resources */,
+				FF6B7A0926C5CB9F001B5A7E /* teapot.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

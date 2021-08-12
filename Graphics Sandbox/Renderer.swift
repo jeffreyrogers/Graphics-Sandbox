@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import ModelIO
 
 class Renderer: NSObject, MTKViewDelegate {
     var parent: MetalView
@@ -14,7 +15,8 @@ class Renderer: NSObject, MTKViewDelegate {
     var pipelineState: MTLRenderPipelineState?
     let vertexBuffer: MTLBuffer
     var mouseLocation: NSPoint = NSPoint(x: 0, y: 0)
-    
+    var vertexDescriptor: MTLVertexDescriptor!
+
     init(_ parent: MetalView) {
         self.parent = parent
         self.device = MTLCreateSystemDefaultDevice()!
@@ -25,6 +27,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         vertexBuffer = device.makeBuffer(bytes: vertices, length: vertices.count * MemoryLayout<Vertex2>.stride, options: [])!
         super.init()
+        loadResources()
     }
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
@@ -60,6 +63,18 @@ class Renderer: NSObject, MTKViewDelegate {
             
             return nil
         }
+    }
+    
+    func loadResources() {
+        let modelURL = Bundle.main.url(forResource: "teapot", withExtension: "obj")!
+        let vd = MDLVertexDescriptor()
+        vd.attributes[0] = MDLVertexAttribute(name: MDLVertexAttributePosition, format: .float3, offset: 0, bufferIndex: 0)
+        vd.attributes[1] = MDLVertexAttribute(name: MDLVertexAttributeNormal, format: .float3, offset: MemoryLayout<Float>.size*3, bufferIndex: 0)
+        vd.attributes[2] = MDLVertexAttribute(name: MDLVertexAttributeTextureCoordinate, format: .float3, offset: MemoryLayout<Float>.size*6, bufferIndex: 0)
+        vd.layouts[0] = MDLVertexBufferLayout(stride: MemoryLayout<Float>.size * 8)
+        self.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(vd)
+        
+        let bufferAllocator = MTKMeshBufferAllocator(device: self.device)
     }
 
     // This gets called ~60 times per second (configured in makeNSView when we set preferredFramesPerSecond)

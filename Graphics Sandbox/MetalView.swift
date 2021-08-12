@@ -21,6 +21,8 @@ struct MetalView: NSViewRepresentable {
         mtkView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
         mtkView.drawableSize = mtkView.frame.size
         mtkView.device = MTLCreateSystemDefaultDevice()!
+        mtkView.colorPixelFormat = .bgra8Unorm
+        
         return mtkView
     }
     
