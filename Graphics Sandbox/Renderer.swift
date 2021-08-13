@@ -6,7 +6,6 @@
 //
 
 import MetalKit
-import ModelIO
 import simd
 
 class Renderer: NSObject, MTKViewDelegate {
