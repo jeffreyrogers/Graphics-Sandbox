@@ -20,8 +20,8 @@ struct MetalView: NSViewRepresentable {
         mtkView.framebufferOnly = false
         mtkView.drawableSize = mtkView.frame.size
         mtkView.device = context.coordinator.device
-        mtkView.colorPixelFormat = .bgra8Unorm
-//        mtkView.depthStencilPixelFormat = .depth32Float
+        mtkView.colorPixelFormat = .bgra8Unorm_srgb
+        mtkView.depthStencilPixelFormat = .depth32Float
         
         return mtkView
     }

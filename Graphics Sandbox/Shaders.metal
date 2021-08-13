@@ -38,5 +38,6 @@ vertex VertexOut vertexShader(VertexIn in [[stage_in]], constant Uniforms &unifo
 
 fragment float4 fragmentShader(VertexOut in [[stage_in]])
 {
-    return float4(1, 0, 0, 1);
+    float3 normal = normalize(in.eyeNormal.xyz);
+    return float4(abs(normal), 1);
 }

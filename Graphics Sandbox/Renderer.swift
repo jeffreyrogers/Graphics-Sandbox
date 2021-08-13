@@ -17,11 +17,16 @@ class Renderer: NSObject, MTKViewDelegate {
     var vertexDescriptor: MTLVertexDescriptor!
     var meshes: [MTKMesh] = []
     var time: Float = 0
+    let depthStencilState: MTLDepthStencilState
 
     init(_ parent: MetalView) {
         self.parent = parent
         self.device = MTLCreateSystemDefaultDevice()!
         self.commandQueue = device.makeCommandQueue()!
+        let depthStencilDescriptor = MTLDepthStencilDescriptor()
+        depthStencilDescriptor.depthCompareFunction = .less
+        depthStencilDescriptor.isDepthWriteEnabled = true
+        depthStencilState = self.device.makeDepthStencilState(descriptor: depthStencilDescriptor)!
         super.init()
         loadTeapot()
     }
@@ -107,6 +112,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let re = commandBuffer?.makeRenderCommandEncoder(descriptor: rpd!)
         re?.setRenderPipelineState(self.pipelineState!)
         re?.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 1)
+        re?.setDepthStencilState(self.depthStencilState)
         
         for mesh in self.meshes {
             let vertexBuffer = mesh.vertexBuffers.first!
@@ -134,7 +140,7 @@ class Renderer: NSObject, MTKViewDelegate {
         pipelineDescriptor.vertexFunction = library?.makeFunction(name: "vertexShader")
         pipelineDescriptor.fragmentFunction = library?.makeFunction(name: "fragmentShader")
         pipelineDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
-//        pipelineDescriptor.depthAttachmentPixelFormat = view.depthStencilPixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = view.depthStencilPixelFormat
         pipelineDescriptor.vertexDescriptor = self.vertexDescriptor
         return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
