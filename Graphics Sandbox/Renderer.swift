@@ -67,13 +67,13 @@ class Renderer: NSObject, MTKViewDelegate {
         let vd = MDLVertexDescriptor()
         vd.attributes[0] = MDLVertexAttribute(name: MDLVertexAttributePosition, format: .float3, offset: 0, bufferIndex: 0)
         vd.attributes[1] = MDLVertexAttribute(name: MDLVertexAttributeNormal, format: .float3, offset: MemoryLayout<Float>.size*3, bufferIndex: 0)
-        vd.attributes[2] = MDLVertexAttribute(name: MDLVertexAttributeTextureCoordinate, format: .float3, offset: MemoryLayout<Float>.size*6, bufferIndex: 0)
+        vd.attributes[2] = MDLVertexAttribute(name: MDLVertexAttributeTextureCoordinate, format: .float2, offset: MemoryLayout<Float>.size*6, bufferIndex: 0)
         vd.layouts[0] = MDLVertexBufferLayout(stride: MemoryLayout<Float>.size * 8)
         self.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(vd)
-        
+
         let ba = MTKMeshBufferAllocator(device: self.device)
         let teapot = MDLAsset(url: modelURL, vertexDescriptor: vd, bufferAllocator: ba)
-        
+
         do {
             // first part contains the original teapot meshes, which we don't care about anymore so we ignore it
             (_, self.meshes) = try MTKMesh.newMeshes(asset: teapot, device: self.device)
