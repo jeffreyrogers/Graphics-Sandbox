@@ -31,13 +31,12 @@ vertex VertexOut vertexShader(VertexIn in [[stage_in]], constant Uniforms &unifo
     VertexOut out;
     out.texCoords = in.texCoords;
     out.position = uniforms.PMatrix * uniforms.MVMatrix * float4(in.position, 1);
-    out.eyeNormal = uniforms.MVMatrix * float4(in.position, 0);
-    out.eyePosition = uniforms.MVMatrix * float4(in.normal, 1);
     return out;
 }
 
-fragment float4 fragmentShader(VertexOut in [[stage_in]])
+fragment float4 fragmentShader(VertexOut in [[stage_in]],
+                               texture2d<float, access::sample> tex [[texture(0)]],
+                               sampler sampler [[sampler(0)]])
 {
-    float3 normal = normalize(in.eyeNormal.xyz);
-    return float4(abs(normal), 1);
+    return tex.sample(sampler, in.texCoords);
 }

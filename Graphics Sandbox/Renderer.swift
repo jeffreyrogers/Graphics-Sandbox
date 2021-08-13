@@ -18,15 +18,26 @@ class Renderer: NSObject, MTKViewDelegate {
     var meshes: [MTKMesh] = []
     var time: Float = 0
     let depthStencilState: MTLDepthStencilState
+    var tileTexture: MTLTexture?
+    let samplerState: MTLSamplerState
 
     init(_ parent: MetalView) {
         self.parent = parent
         self.device = MTLCreateSystemDefaultDevice()!
         self.commandQueue = device.makeCommandQueue()!
+
         let depthStencilDescriptor = MTLDepthStencilDescriptor()
         depthStencilDescriptor.depthCompareFunction = .less
         depthStencilDescriptor.isDepthWriteEnabled = true
-        depthStencilState = self.device.makeDepthStencilState(descriptor: depthStencilDescriptor)!
+        self.depthStencilState = self.device.makeDepthStencilState(descriptor: depthStencilDescriptor)!
+        
+        let samplerDescriptor = MTLSamplerDescriptor()
+        samplerDescriptor.normalizedCoordinates = true
+        samplerDescriptor.minFilter = .linear
+        samplerDescriptor.magFilter = .linear
+        samplerDescriptor.mipFilter = .linear
+        self.samplerState = self.device.makeSamplerState(descriptor: samplerDescriptor)!
+        
         super.init()
         loadTeapot()
     }
@@ -69,6 +80,8 @@ class Renderer: NSObject, MTKViewDelegate {
     func loadTeapot() {
         let modelURL = Bundle.main.url(forResource: "teapot", withExtension: "obj")!
         let vd = MDLVertexDescriptor()
+        
+        // TODO: switch this to non-interleaved data
         vd.attributes[0] = MDLVertexAttribute(name: MDLVertexAttributePosition, format: .float3, offset: 0, bufferIndex: 0)
         vd.attributes[1] = MDLVertexAttribute(name: MDLVertexAttributeNormal, format: .float3, offset: MemoryLayout<Float>.size*3, bufferIndex: 0)
         vd.attributes[2] = MDLVertexAttribute(name: MDLVertexAttributeTextureCoordinate, format: .float2, offset: MemoryLayout<Float>.size*6, bufferIndex: 0)
@@ -84,6 +97,10 @@ class Renderer: NSObject, MTKViewDelegate {
         } catch {
             fatalError("Could not extract meshes from Model I/O asset")
         }
+        
+        let textureLoader = MTKTextureLoader(device: self.device)
+        let options: [MTKTextureLoader.Option : Any] = [.generateMipmaps: true, .SRGB: true]
+        self.tileTexture = try? textureLoader.newTexture(name: "Tiles", scaleFactor: 1.0, bundle: nil, options: options)
     }
 
     func update(view: MTKView) {
@@ -92,6 +109,8 @@ class Renderer: NSObject, MTKViewDelegate {
     
     // This gets called ~60 times per second (configured in makeNSView when we set preferredFramesPerSecond)
     func draw(in view: MTKView) {
+        // Process Input
+        
         // Update
         self.time += 1 / Float(view.preferredFramesPerSecond)
         let angle = -time
@@ -105,7 +124,7 @@ class Renderer: NSObject, MTKViewDelegate {
         // Render
         let commandBuffer = self.commandQueue.makeCommandBuffer()
         let rpd = view.currentRenderPassDescriptor
-        rpd?.colorAttachments[0].clearColor = MTLClearColorMake(0, 1, 1, 1)
+        rpd?.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
         rpd?.colorAttachments[0].loadAction = .clear
         rpd?.colorAttachments[0].storeAction = .store
         
@@ -113,7 +132,9 @@ class Renderer: NSObject, MTKViewDelegate {
         re?.setRenderPipelineState(self.pipelineState!)
         re?.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 1)
         re?.setDepthStencilState(self.depthStencilState)
-        
+        re?.setFragmentTexture(self.tileTexture, index: 0)
+        re?.setFragmentSamplerState(self.samplerState, index: 0)
+
         for mesh in self.meshes {
             let vertexBuffer = mesh.vertexBuffers.first!
             re?.setVertexBuffer(vertexBuffer.buffer, offset: vertexBuffer.offset, index: 0)
