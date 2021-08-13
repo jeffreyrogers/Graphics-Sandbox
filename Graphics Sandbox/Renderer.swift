@@ -20,6 +20,7 @@ class Renderer: NSObject, MTKViewDelegate {
     let depthStencilState: MTLDepthStencilState
     var tileTexture: MTLTexture?
     let samplerState: MTLSamplerState
+    var uniforms = Uniforms()
 
     init(_ parent: MetalView) {
         self.parent = parent
@@ -104,14 +105,6 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     func update(view: MTKView) {
-        
-    }
-    
-    // This gets called ~60 times per second (configured in makeNSView when we set preferredFramesPerSecond)
-    func draw(in view: MTKView) {
-        // Process Input
-        
-        // Update
         self.time += 1 / Float(view.preferredFramesPerSecond)
         let angle = -time
         let modelMatrix = float4x4(rotateAbout: SIMD3<Float>(0, 1, 1), by: angle) * float4x4(scaleBy: 2)
@@ -119,8 +112,15 @@ class Renderer: NSObject, MTKViewDelegate {
         let modelViewMatrix = viewMatrix * modelMatrix
         let aspectRatio = Float(view.drawableSize.width / view.drawableSize.height)
         let projectionMatrix = float4x4(fov: Float.pi/3, aspectRatio: aspectRatio, nearZ: 0.1, farZ: 100)
-        var uniforms = Uniforms(MVMatrix: modelViewMatrix, PMatrix: projectionMatrix)
+        self.uniforms = Uniforms(modelViewMatrix: modelViewMatrix, projectionMatrix: projectionMatrix)
+    }
         
+    // This gets called ~60 times per second (configured in makeNSView when we set preferredFramesPerSecond)
+    func draw(in view: MTKView) {
+        // Process Input
+        
+        self.update(view: view)
+
         // Render
         let commandBuffer = self.commandQueue.makeCommandBuffer()
         let rpd = view.currentRenderPassDescriptor
@@ -130,7 +130,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let re = commandBuffer?.makeRenderCommandEncoder(descriptor: rpd!)
         re?.setRenderPipelineState(self.pipelineState!)
-        re?.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.size, index: 1)
+        re?.setVertexBytes(&self.uniforms, length: MemoryLayout<Uniforms>.size, index: 1)
         re?.setDepthStencilState(self.depthStencilState)
         re?.setFragmentTexture(self.tileTexture, index: 0)
         re?.setFragmentSamplerState(self.samplerState, index: 0)
@@ -168,6 +168,16 @@ class Renderer: NSObject, MTKViewDelegate {
 }
 
 struct Uniforms {
+    init() {
+        MVMatrix = float4x4()
+        PMatrix = float4x4()
+    }
+    
+    init(modelViewMatrix: float4x4, projectionMatrix: float4x4) {
+        MVMatrix = modelViewMatrix
+        PMatrix = projectionMatrix
+    }
+    
     var MVMatrix: float4x4
     var PMatrix: float4x4
 }
