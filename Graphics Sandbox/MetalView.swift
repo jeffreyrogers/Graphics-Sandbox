@@ -18,7 +18,6 @@ struct MetalView: NSViewRepresentable {
         mtkView.delegate = context.coordinator
         mtkView.preferredFramesPerSecond = 60
         mtkView.framebufferOnly = false
-        mtkView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
         mtkView.drawableSize = mtkView.frame.size
         mtkView.device = MTLCreateSystemDefaultDevice()! // try replacing this with context.coordinator.device so we only call this once
         mtkView.colorPixelFormat = .bgra8Unorm
