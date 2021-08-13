@@ -19,7 +19,7 @@ struct MetalView: NSViewRepresentable {
         mtkView.preferredFramesPerSecond = 60
         mtkView.framebufferOnly = false
         mtkView.drawableSize = mtkView.frame.size
-        mtkView.device = MTLCreateSystemDefaultDevice()! // try replacing this with context.coordinator.device so we only call this once
+        mtkView.device = context.coordinator.device
         mtkView.colorPixelFormat = .bgra8Unorm
 //        mtkView.depthStencilPixelFormat = .depth32Float
         
