@@ -15,6 +15,7 @@
 		FF6B7A0526C5A45E001B5A7E /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B7A0426C5A45E001B5A7E /* MetalView.swift */; };
 		FF6B7A0726C5B5E4001B5A7E /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */; };
 		FF6B7A0926C5CB9F001B5A7E /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = FF6B7A0826C5CB9F001B5A7E /* teapot.obj */; };
+		FF6B7A0B26C6040B001B5A7E /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B7A0A26C6040B001B5A7E /* Math.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,12 +24,11 @@
 		FF5E95F026C2454C00FA33B1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FF5E95F226C2454F00FA33B1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FF5E95F526C2454F00FA33B1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		FF5E95FC26C3401B00FA33B1 /* Graphics Sandbox-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Graphics Sandbox-Bridging-Header.h"; sourceTree = "<group>"; };
-		FF5E95FF26C3407700FA33B1 /* ShaderDefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderDefinitions.h; sourceTree = "<group>"; };
 		FF5E960026C340B900FA33B1 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		FF6B7A0426C5A45E001B5A7E /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		FF6B7A0826C5CB9F001B5A7E /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
+		FF6B7A0A26C6040B001B5A7E /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,11 +66,10 @@
 				FF6B7A0426C5A45E001B5A7E /* MetalView.swift */,
 				FF5E95F226C2454F00FA33B1 /* Assets.xcassets */,
 				FF5E95F426C2454F00FA33B1 /* Preview Content */,
-				FF5E95FC26C3401B00FA33B1 /* Graphics Sandbox-Bridging-Header.h */,
-				FF5E95FF26C3407700FA33B1 /* ShaderDefinitions.h */,
 				FF5E960026C340B900FA33B1 /* Shaders.metal */,
 				FF6B7A0626C5B5E4001B5A7E /* Renderer.swift */,
 				FF6B7A0826C5CB9F001B5A7E /* teapot.obj */,
+				FF6B7A0A26C6040B001B5A7E /* Math.swift */,
 			);
 			path = "Graphics Sandbox";
 			sourceTree = "<group>";
@@ -160,6 +159,7 @@
 				FF5E95F126C2454C00FA33B1 /* ContentView.swift in Sources */,
 				FF6B7A0726C5B5E4001B5A7E /* Renderer.swift in Sources */,
 				FF5E95EF26C2454C00FA33B1 /* Graphics_SandboxApp.swift in Sources */,
+				FF6B7A0B26C6040B001B5A7E /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,7 +307,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "JDR.Graphics-Sandbox";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Graphics Sandbox/Graphics Sandbox-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -339,7 +338,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "JDR.Graphics-Sandbox";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Graphics Sandbox/Graphics Sandbox-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

@@ -6,24 +6,37 @@
 //
 
 #include <metal_stdlib>
-#include "ShaderDefinitions.h"
 using namespace metal;
 
-struct VertexOut {
-    float4 color;
-    float4 pos [[position]];
+struct VertexIn {
+    float3 position  [[attribute(0)]];
+    float3 normal    [[attribute(1)]];
+    float2 texCoords [[attribute(2)]];
 };
 
-vertex VertexOut vertexShader(const device Vertex2* vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]])
+struct VertexOut {
+    float4 position [[position]];
+    float4 eyeNormal;
+    float4 eyePosition;
+    float2 texCoords;
+};
+
+struct Uniforms {
+    float4x4 MVMatrix;
+    float4x4 PMatrix;
+};
+
+vertex VertexOut vertexShader(VertexIn in [[stage_in]], constant Uniforms &uniforms [[buffer(1)]])
 {
     VertexOut out;
-    Vertex2 in = vertexArray[vid];
-    out.color = in.color;
-    out.pos = float4(in.pos.x, in.pos.y, 0, 1);
+    out.texCoords = in.texCoords;
+    out.position = uniforms.PMatrix * uniforms.MVMatrix * float4(in.position, 1);
+    out.eyeNormal = uniforms.MVMatrix * float4(in.position, 0);
+    out.eyePosition = uniforms.MVMatrix * float4(in.normal, 1);
     return out;
 }
 
-fragment float4 fragmentShader(VertexOut interpolated [[stage_in]])
+fragment float4 fragmentShader(VertexOut in [[stage_in]])
 {
-    return interpolated.color;
+    return float4(1, 0, 0, 1);
 }
