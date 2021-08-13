@@ -114,14 +114,12 @@ class Renderer: NSObject, MTKViewDelegate {
         let projectionMatrix = float4x4(fov: Float.pi/3, aspectRatio: aspectRatio, nearZ: 0.1, farZ: 100)
         self.uniforms = Uniforms(modelViewMatrix: modelViewMatrix, projectionMatrix: projectionMatrix)
     }
+    
+    func process_input() {
         
-    // This gets called ~60 times per second (configured in makeNSView when we set preferredFramesPerSecond)
-    func draw(in view: MTKView) {
-        // Process Input
-        
-        self.update(view: view)
+    }
 
-        // Render
+    func render(view: MTKView) {
         let commandBuffer = self.commandQueue.makeCommandBuffer()
         let rpd = view.currentRenderPassDescriptor
         rpd?.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
@@ -153,6 +151,13 @@ class Renderer: NSObject, MTKViewDelegate {
         re?.endEncoding()
         commandBuffer?.present(view.currentDrawable!)
         commandBuffer?.commit()
+    }
+    
+    // This is the game loop. It is called mtkView.preferredFramesPerSecond times per second
+    func draw(in view: MTKView) {
+        self.process_input()
+        self.update(view: view)
+        self.render(view: view)
     }
     
     func buildRenderPipelineWith(device: MTLDevice, view: MTKView) throws -> MTLRenderPipelineState {
