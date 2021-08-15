@@ -21,6 +21,8 @@ class Renderer: NSObject, MTKViewDelegate {
     var tileTexture: MTLTexture?
     let samplerState: MTLSamplerState
     var uniforms = Uniforms()
+    var keys: [Character] = []
+    var angle: Float = 0.0
 
     init(_ parent: MetalView) {
         self.parent = parent
@@ -66,11 +68,15 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) {
-            print("key \($0.charactersIgnoringModifiers ?? "")")
-            
             if $0.modifierFlags.contains(.command) {
                 if $0.characters?.contains("q") == true {
                     return $0
+                }
+            } else {
+                if $0.characters?.contains("a") == true {
+                    self.keys.append("a")
+                } else if $0.characters?.contains("d") == true {
+                    self.keys.append("d")
                 }
             }
             
@@ -105,9 +111,18 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     func update(view: MTKView) {
-        self.time += 1 / Float(view.preferredFramesPerSecond)
-        let angle = -time
-        let modelMatrix = float4x4(rotateAbout: SIMD3<Float>(0, 1, 1), by: angle) * float4x4(scaleBy: 2)
+        while !keys.isEmpty {
+            let key = keys.removeFirst()
+            if key == "a" {
+                self.angle += 1 / 20
+            }
+            else if key == "d" {
+                self.angle -= 1 / 20
+            }
+        }
+        
+        let modelMatrix = float4x4(rotateAbout: SIMD3<Float>(0, 1, 0), by: angle) * float4x4(scaleBy: 2)
+
         let viewMatrix = float4x4(translateBy: SIMD3<Float>(0, 0, -2))
         let modelViewMatrix = viewMatrix * modelMatrix
         let aspectRatio = Float(view.drawableSize.width / view.drawableSize.height)
